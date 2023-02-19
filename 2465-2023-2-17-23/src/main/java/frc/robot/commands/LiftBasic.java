@@ -36,6 +36,7 @@ public class LiftBasic extends CommandBase {
     liftdown = lifter.lowLimit();
     switch(state)
     {
+      //-expl Set power to be positive until top limit switch is pressed
       case UP:
       if(liftUp)
       {
@@ -47,6 +48,7 @@ public class LiftBasic extends CommandBase {
       }
       break;
 
+      //-expl Set power to be negative until bottom limit switch is pressed
       case DOWN:
       if(liftdown)
       {
@@ -58,6 +60,7 @@ public class LiftBasic extends CommandBase {
       }
       break;
 
+      //-expl Set power to be 0
       case STOP:
       lifter.setPower(0);
 

@@ -32,6 +32,8 @@ public class WristBasic extends CommandBase {
   public void execute() {
     switch(state)
     {
+      //-expl Set wrist to desired position
+
       case OUT:
       wrister.setPos(enacted_input);
       break;

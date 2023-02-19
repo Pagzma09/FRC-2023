@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import javax.lang.model.util.ElementScanner14;
-
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,11 +38,13 @@ public class AutoBalanceV2 extends CommandBase {
   @Override
   public void execute() {
 
+    //-expl Set error to pitch
     if(Math.abs(driver.getPitch()) > desired_pitch)
     {   
     error = Math.abs(driver.getPitch()) - desired_pitch;
     reportederror = error;
-
+    
+    //-expl Clip power to 0 - 0.13. Multiply power by error.
     if(error < 0)
     {
       power = 0;
@@ -59,10 +59,15 @@ public class AutoBalanceV2 extends CommandBase {
       power = 0.13;
     }
 
+    //-expl Update SmartDashboard
     SmartDashboard.putNumber("command pitch", driver.getPitch());
     SmartDashboard.putNumber("power", power);
     SmartDashboard.putNumber("error", error);
 
+    //-expl Drive with power set earlier
+
+    //-expl Drive forward if pitch is negative
+    //-expl Drive backward if pitch is positive
     if(driver.getPitch() > 0)
     {
       driver.drive
