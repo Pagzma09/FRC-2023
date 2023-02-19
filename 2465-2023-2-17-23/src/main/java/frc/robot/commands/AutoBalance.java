@@ -16,7 +16,7 @@ public class AutoBalance extends CommandBase {
   /** Creates a new AutoBalance. */
   private final Drive driver = Robot.drive;
   private final double desired_pitch = 3.5;
-  private boolean isDone;
+  private boolean isDone = false;
   public AutoBalance() {
     addRequirements(driver);
     // Use addRequirements() here to declare subsystem dependencies.

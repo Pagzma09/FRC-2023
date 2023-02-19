@@ -48,17 +48,14 @@ public class ClawBasic extends CommandBase {
       clawer.setRotate(-enacted_input);
       break;
 
-      //! Intake command in claw command. Bad practice.
       case Suck:
       clawer.setSpin(enacted_input);
       break;
 
-      //! Intake command in claw command. Bad practice.
       case Spit:
       clawer.setSpin(-enacted_input);
       break;
-
-      //! Intake command in claw command. Bad practice.
+  
       case Stop:
       clawer.setSpin(0);
       //clawer.hold();
