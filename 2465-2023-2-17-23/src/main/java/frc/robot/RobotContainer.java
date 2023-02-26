@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AddressLEDs;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.Autos;
 import frc.robot.commands.CAEBasic;
@@ -27,6 +28,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Extension;
 import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.AddressableLEDInterface.LEDCommands;
 import frc.robot.subsystems.Claw.ClawBasicStates;
 import frc.robot.subsystems.Extension.ExtensionBasicStates;
 import frc.robot.subsystems.Lift.GoToLiftStates;
@@ -75,6 +77,8 @@ public class RobotContainer {
   private static final JoystickButton clawClose = new JoystickButton(buttonboard, 8);
   private static final JoystickButton wristOut = new JoystickButton(buttonboard, 9);
   private static final JoystickButton wristIn = new JoystickButton(buttonboard, 10);
+  private static final JoystickButton toggleLEDsFwd = new JoystickButton(buttonboard, 11);
+  private static final JoystickButton toggleLEDsBck = new JoystickButton(buttonboard, 12);
   private static final JoystickButton clawOpenBuildDelayed = new JoystickButton(buttonboard, 11);
   private static final JoystickButton clawCloseBuildDelayed = new JoystickButton(buttonboard, 12);
   private static final JoystickButton AutoBalanceButton = new JoystickButton(experimental, 1);
@@ -132,6 +136,8 @@ public class RobotContainer {
     clawOpenBuildDelayed.toggleOnTrue(new GoToLiftEncoder(GoToLiftStates.HIGH));
     clawCloseBuildDelayed.whileTrue(new GoToLiftEncoder(GoToLiftStates.LOW));
     AutoBalanceButton.toggleOnTrue(new AutoBalance());
+    toggleLEDsBck.onTrue(new AddressLEDs(3, 5, LEDCommands.CycleBack));
+    toggleLEDsFwd.onTrue(new AddressLEDs(3, 5, LEDCommands.CycleFwd));
 
     //MIGRATED
     liftgotoLowestAuto.toggleOnTrue(new GoToLift(GoToLiftStates.LOW, 0.2));

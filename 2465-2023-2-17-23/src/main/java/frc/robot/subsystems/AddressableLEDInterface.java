@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AddressableLEDInterface extends SubsystemBase{
     ArrayList<DigitalOutput> outputs;
+    public static enum LEDCommands {CycleBack, CycleFwd};
 
     public AddressableLEDInterface(){}
 
