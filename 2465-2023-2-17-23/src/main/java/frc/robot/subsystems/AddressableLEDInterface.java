@@ -5,12 +5,15 @@ import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.LEDConstants;
 
 public class AddressableLEDInterface extends SubsystemBase{
     ArrayList<DigitalOutput> outputs;
     public static enum LEDCommands {CycleBack, CycleFwd};
 
-    public AddressableLEDInterface(){}
+    public AddressableLEDInterface(){
+        for(int n = 0; n < LEDConstants.numChannels; n++) outputs.add(new DigitalOutput(n + LEDConstants.startChannel));
+    }
 
     public void addChannel(int channel){
         //-expl Adds a new output at the specified channel

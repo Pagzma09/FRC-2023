@@ -284,10 +284,11 @@ public final class Constants {
    public static final double clawMaxOut = 0.5;
  }
 
- public static class LEDChannels
+ public static class LEDConstants
  {
     public static final int startChannel = 5;
     public static final int numChannels = 3;
+    public static final int numPatterns = 5;
  }
  /*
   * TODO:

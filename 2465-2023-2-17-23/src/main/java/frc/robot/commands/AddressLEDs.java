@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.Constants.LEDChannels;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.AddressableLEDInterface;
 import frc.robot.subsystems.AddressableLEDInterface.LEDCommands;
 
@@ -13,7 +13,6 @@ public class AddressLEDs extends CommandBase{
 
     public AddressLEDs(LEDCommands state){
         addRequirements(LEDer);
-        for(int n = 0; n < LEDChannels.numChannels; n++) LEDer.addChannel(n + LEDChannels.numChannels);
         this.state = state;
     }
 
@@ -22,10 +21,10 @@ public class AddressLEDs extends CommandBase{
     public void initialize() {
         switch(state){
             case CycleBack:
-                LEDer.setValueBin(LEDer.getValueBin() - 1);
+                LEDer.setValueBin((LEDer.getValueBin() - 1 < 0? 0: LEDer.getValueBin() - 1));
                 break;
             case CycleFwd:
-                LEDer.setValueBin(LEDer.getValueBin() + 1);
+                LEDer.setValueBin((LEDer.getValueBin() + 1 > LEDConstants.numPatterns - 1? LEDConstants.numPatterns - 1: LEDer.getValueBin() + 1));
                 break;
         }
     }
