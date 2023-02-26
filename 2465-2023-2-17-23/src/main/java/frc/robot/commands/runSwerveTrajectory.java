@@ -20,7 +20,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.Drive;
 
 /* */
-public class runSwerveTrajectory extends CommandBase {
+public class RunSwerveTrajectory extends CommandBase {
   /** Creates a new runSwerveTrajectory. */
   private Drive drive = Robot.drive;
   private final SwerveControllerCommand controller;
@@ -31,7 +31,7 @@ public class runSwerveTrajectory extends CommandBase {
   private boolean isDone = false;
 
 
-  public runSwerveTrajectory(Trajectory path) {
+  public RunSwerveTrajectory(Trajectory path) {
 
     this.path = path;
     
