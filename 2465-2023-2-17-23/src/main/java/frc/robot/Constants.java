@@ -284,10 +284,15 @@ public final class Constants {
    public static final double clawMaxOut = 0.5;
  }
 
+ public static class LEDChannels
+ {
+    public static final int startChannel = 5;
+    public static final int numChannels = 3;
+ }
  /*
   * TODO:
     - Finish Assigning CAN ID's for TalonFx's
-    - Finish Claw rudamentary code
+    - Finish Claw rudimentary code
     - Get Grabber working
     - Calibrate wrist encoder
     - SysID

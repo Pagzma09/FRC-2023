@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AutoBasic;
 import frc.robot.commands.SwerveCommander;
+import frc.robot.subsystems.AddressableLEDInterface;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.ClawAbsoluteEncoder;
 import frc.robot.subsystems.Drive;
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
   public static Wrist wrist;
   public static SwerveCommander commander;
   public static ClawAbsoluteEncoder cae;
+  public static AddressableLEDInterface aledi;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -52,7 +54,7 @@ public class Robot extends TimedRobot {
     cae = new ClawAbsoluteEncoder();
     m_robotContainer = new RobotContainer();
     commander = new SwerveCommander();
-  
+    aledi = new AddressableLEDInterface();
   }
 
   /**

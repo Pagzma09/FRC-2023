@@ -136,8 +136,8 @@ public class RobotContainer {
     clawOpenBuildDelayed.toggleOnTrue(new GoToLiftEncoder(GoToLiftStates.HIGH));
     clawCloseBuildDelayed.whileTrue(new GoToLiftEncoder(GoToLiftStates.LOW));
     AutoBalanceButton.toggleOnTrue(new AutoBalance());
-    toggleLEDsBck.onTrue(new AddressLEDs(3, 5, LEDCommands.CycleBack));
-    toggleLEDsFwd.onTrue(new AddressLEDs(3, 5, LEDCommands.CycleFwd));
+    toggleLEDsBck.onTrue(new AddressLEDs(LEDCommands.CycleBack));
+    toggleLEDsFwd.onTrue(new AddressLEDs(LEDCommands.CycleFwd));
 
     //MIGRATED
     liftgotoLowestAuto.toggleOnTrue(new GoToLift(GoToLiftStates.LOW, 0.2));
