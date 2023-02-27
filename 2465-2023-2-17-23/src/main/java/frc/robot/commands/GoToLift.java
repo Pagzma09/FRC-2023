@@ -13,6 +13,7 @@ import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.Lift.GoToLiftStates;
 
 public class GoToLift extends CommandBase {
+  //-expl Init lift, state, power, and variable 'done'
   private final Lift lifter = Robot.lift;
   private final GoToLiftStates states;
   private double power;
@@ -34,9 +35,14 @@ public class GoToLift extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //-expl Switch over state.
+
     switch(states)
     {
       case HIGH:
+
+      //-expl If state is high, set power to 0.5 until the top limit switch triggers.
+
       if(lifter.highLimit())
       {
         lifter.setPower(power);
@@ -47,6 +53,7 @@ public class GoToLift extends CommandBase {
       }
       break;
 
+      //-expl If state is low, set power to 0.5 until the bottom limit switch triggers.
       case LOW:
       if(lifter.lowLimit())
       {
@@ -58,6 +65,7 @@ public class GoToLift extends CommandBase {
       }
       break;
 
+      //-expl If state is middle, use realtime position to center on the 180-150 range.
       case MIDDLE:
       if(lifter.midLimit())
       {

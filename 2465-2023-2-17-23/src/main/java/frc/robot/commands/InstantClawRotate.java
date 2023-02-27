@@ -22,6 +22,7 @@ public class InstantClawRotate extends InstantCommand {
 
   // Called when the command is initially scheduled.
   @Override
+  //-expl Short command to go to a selected position
   public void initialize() {
     clawer.goToRotate(-positiontogo);
   }

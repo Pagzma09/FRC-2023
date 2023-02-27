@@ -29,6 +29,8 @@ public class GoToLiftEncoder extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    //-expl Use high-level PID commands to move the lift to a certain encoder position based on state. 
     switch(state)
     {
       case HIGH:

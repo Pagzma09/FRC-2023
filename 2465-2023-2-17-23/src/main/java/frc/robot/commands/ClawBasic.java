@@ -11,10 +11,18 @@ import frc.robot.subsystems.Claw.ClawBasicStates;
 
 public class ClawBasic extends CommandBase {
   /** Creates a new ClawBasic. */
+  //-expl Initalize claw
   private final Claw clawer = Robot.claw;
+
+  //-expl Create a new ClawBasicState
   private final ClawBasicStates state;
+  
+  //-expl Initalize a variable for the set power
   private final double enacted_input;
+  
   public ClawBasic(ClawBasicStates state, double enacted_input) {
+    
+    //-expl Initalize variables    
     this.state = state;
     this.enacted_input = enacted_input;
     addRequirements(clawer);
@@ -28,7 +36,8 @@ public class ClawBasic extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    
+    //-expl Set the speed of the claw (or the intake) to enacted_input or -enacted_input based on *state*
     switch(state)
     {
       case Open:
@@ -46,7 +55,7 @@ public class ClawBasic extends CommandBase {
       case Spit:
       clawer.setSpin(-enacted_input);
       break;
-
+  
       case Stop:
       clawer.setSpin(0);
       //clawer.hold();

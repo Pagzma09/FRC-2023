@@ -10,8 +10,12 @@ import frc.robot.subsystems.Extension;
 
 public class GoToExtensionEncoder extends CommandBase {
   /** Creates a new GoToExtensionEncoder. */
+
+  //-expl Initialize the extension and position variable
   private final Extension extender = Robot.extension;
   private final double pos;
+
+  //-expl Set variables
   public GoToExtensionEncoder(double pos) {
     this.pos = pos;
     addRequirements(extender);
@@ -27,6 +31,7 @@ public class GoToExtensionEncoder extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //-expl Set the encoder set position
     extender.setPosition(pos);
   }
 

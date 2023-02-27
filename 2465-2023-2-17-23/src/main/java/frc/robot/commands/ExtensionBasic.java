@@ -11,10 +11,13 @@ import frc.robot.subsystems.Extension.ExtensionBasicStates;
 
 public class ExtensionBasic extends CommandBase {
   /** Creates a new ExtensionBasic. */
+
+  //-expl Initialize extension, state, and power variables
   private final Extension extensioner = Robot.extension;
   private final ExtensionBasicStates state;
   private final double power;
   public ExtensionBasic(ExtensionBasicStates state, double power) {
+    //-expl Set variables
     this.state = state;
     this.power = power;
     addRequirements(extensioner);
@@ -28,6 +31,7 @@ public class ExtensionBasic extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //-expl Switch on state. Intutive.
     switch(state)
     {
       case OUT:
