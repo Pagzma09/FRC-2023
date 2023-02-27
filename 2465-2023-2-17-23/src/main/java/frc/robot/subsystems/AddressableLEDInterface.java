@@ -45,7 +45,7 @@ public class AddressableLEDInterface extends SubsystemBase{
     }
 
     public boolean getValue(int position){
-        //-expl Gets the value from a certain output
+        //-expl Gets the value from a certain output. If out of range, throw exception.
         if(position < outputs.size()){
             return outputs.get(position).get();
         } else throw new InvalidParameterException("Position out of range for current channel selection");
