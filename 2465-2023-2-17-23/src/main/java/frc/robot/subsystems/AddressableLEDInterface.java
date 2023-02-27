@@ -8,11 +8,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants;
 
 public class AddressableLEDInterface extends SubsystemBase{
-    ArrayList<DigitalOutput> outputs;
+    ArrayList<DigitalOutput> outputs = new ArrayList<>();
     public static enum LEDCommands {CycleBack, CycleFwd};
+    int valueBin = 0;
 
     public AddressableLEDInterface(){
         for(int n = 0; n < LEDConstants.numChannels; n++) outputs.add(new DigitalOutput(n + LEDConstants.startChannel));
+        setValueBin(0);
     }
 
     public void addChannel(int channel){
@@ -25,13 +27,16 @@ public class AddressableLEDInterface extends SubsystemBase{
         if(position < outputs.size()){
             outputs.get(position).set(value);
         } else throw new InvalidParameterException("Position out of range for current channel selection");
+        System.out.println("Set port " + (position + LEDConstants.startChannel) + " to value: " + value);
     }
 
     public void setValueBin(int num){
         //-expl Sets the outputs to be a binary number.
         for(int n = 0; n < outputs.size(); n++){
-            this.setValue((((num >> n) & 1) == 1? true: false), n);
+            this.setValue((((num >> n) & 1) == 1? false: true), n);
         }
+        System.out.println("Set value on ports: " + num);
+        valueBin = num;
     }
 
     public int getValueBin(){
@@ -39,13 +44,14 @@ public class AddressableLEDInterface extends SubsystemBase{
         int returnMe = 0;
         for(DigitalOutput output : outputs){
             //-expl For every output, add 2^(number of output) if output is one. For example, 1001 -> 1 * 2^0 + 0 * 2^1 + 0 * 2^2 + 1 * 2^4 -> 1 + 4 -> 5
-            returnMe += (output.get()? 1 : 0) * 1 << outputs.indexOf(output);
+            returnMe += (output.get()? 1 : 0) * (1 << outputs.indexOf(output));
         }
+        returnMe = valueBin;
         return returnMe;
     }
 
     public boolean getValue(int position){
-        //-expl Gets the value from a certain output. If out of range, throw exception.
+        //-expl Gets the value from a certain output. If out of range, throw invalid parameter exception.
         if(position < outputs.size()){
             return outputs.get(position).get();
         } else throw new InvalidParameterException("Position out of range for current channel selection");

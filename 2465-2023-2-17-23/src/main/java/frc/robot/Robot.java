@@ -52,9 +52,9 @@ public class Robot extends TimedRobot {
     claw = new Claw();
     wrist = new Wrist();
     cae = new ClawAbsoluteEncoder();
+    aledi = new AddressableLEDInterface();
     m_robotContainer = new RobotContainer();
     commander = new SwerveCommander();
-    aledi = new AddressableLEDInterface();
   }
 
   /**

@@ -21,6 +21,7 @@ import frc.robot.commands.InstantClawRotate;
 import frc.robot.commands.LiftBasic;
 import frc.robot.commands.StickDrive;
 import frc.robot.commands.WristBasic;
+import frc.robot.subsystems.AddressableLEDInterface;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.ClawAbsoluteEncoder;
 import frc.robot.subsystems.Drive;
@@ -60,6 +61,7 @@ public class RobotContainer {
   private final Claw clawer = Robot.claw;
   private final Wrist wrister = Robot.wrist;
   private final ClawAbsoluteEncoder caer = Robot.cae;
+  private final AddressableLEDInterface aledier = Robot.aledi;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -77,10 +79,10 @@ public class RobotContainer {
   private static final JoystickButton clawClose = new JoystickButton(buttonboard, 8);
   private static final JoystickButton wristOut = new JoystickButton(buttonboard, 9);
   private static final JoystickButton wristIn = new JoystickButton(buttonboard, 10);
-  private static final JoystickButton toggleLEDsFwd = new JoystickButton(buttonboard, 11);
-  private static final JoystickButton toggleLEDsBck = new JoystickButton(buttonboard, 12);
   private static final JoystickButton clawOpenBuildDelayed = new JoystickButton(buttonboard, 11);
   private static final JoystickButton clawCloseBuildDelayed = new JoystickButton(buttonboard, 12);
+  private static final JoystickButton toggleLEDsFwd = new JoystickButton(buttonboard, 13);
+  private static final JoystickButton toggleLEDsBck = new JoystickButton(buttonboard, 14);
   private static final JoystickButton AutoBalanceButton = new JoystickButton(experimental, 1);
   private static final JoystickButton liftgotoLowestAuto = new JoystickButton(experimental, 2);
   private static final JoystickButton liftgotoMiddleAuto = new JoystickButton(experimental, 3);

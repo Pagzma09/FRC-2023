@@ -8,7 +8,7 @@ import frc.robot.subsystems.AddressableLEDInterface.LEDCommands;
 
 public class AddressLEDs extends CommandBase{
 
-    private AddressableLEDInterface LEDer = Robot.aledi;
+    private final AddressableLEDInterface LEDer = Robot.aledi;
     private LEDCommands state;
 
     public AddressLEDs(LEDCommands state){
@@ -21,7 +21,7 @@ public class AddressLEDs extends CommandBase{
     public void initialize() {
         switch(state){
             case CycleBack:
-                LEDer.setValueBin((LEDer.getValueBin() - 1 < 0? 0: LEDer.getValueBin() - 1));
+                LEDer.setValueBin((LEDer.getValueBin() - 1 <= 0? 0: LEDer.getValueBin() - 1));
                 break;
             case CycleFwd:
                 LEDer.setValueBin((LEDer.getValueBin() + 1 > LEDConstants.numPatterns - 1? LEDConstants.numPatterns - 1: LEDer.getValueBin() + 1));

@@ -233,7 +233,7 @@ public final class Constants {
   extension.set(0);
 
   forwardlimit = new DigitalInput(4);
-  reverselimit = new DigitalInput(5);
+  reverselimit = new DigitalInput(9);
  }
 
  public static class ExtensionConstants
