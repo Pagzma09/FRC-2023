@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.LEDConstants.*;
 import frc.robot.commands.AddressLEDs;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.Autos;
@@ -27,6 +28,9 @@ import frc.robot.subsystems.ClawAbsoluteEncoder;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Extension;
+import frc.robot.subsystems.LED_2023_Subsystem;
+import frc.robot.subsystems.LED_Subsystem;
+import frc.robot.subsystems.RoboNurse_Subsystem;
 import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.AddressableLEDInterface.LEDCommands;
@@ -39,8 +43,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -61,7 +67,15 @@ public class RobotContainer {
   private final Claw clawer = Robot.claw;
   private final Wrist wrister = Robot.wrist;
   private final ClawAbsoluteEncoder caer = Robot.cae;
-  private final AddressableLEDInterface aledier = Robot.aledi;
+  // private final AddressableLEDInterface aledier = Robot.aledi;
+
+  // instaniating subysstems here per instructions at
+  // https://docs.wpilib.org/en/stable/docs/software/commandbased/structuring-command-based-project.html
+  // (Note ExampleSubsystem above also instanciated here)
+  public static LED_Subsystem leds = new LED_Subsystem();;
+  public static RoboNurse_Subsystem nurse =  new RoboNurse_Subsystem();
+  public static LED_2023_Subsystem led2023 = new LED_2023_Subsystem();
+  //private final AddressableLEDInterface addressableledinterfacer = new AddressableLEDInterface();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -103,6 +117,10 @@ public class RobotContainer {
     clawer.setDefaultCommand(new ClawBasic(ClawBasicStates.Stop, 0));
     wrister.setDefaultCommand(new WristBasic(WristBasicStates.HOLD, 0));
     caer.setDefaultCommand(new CAEBasic());
+    nurse.StartRoboNurse_Command(leds).schedule();
+    Commands.waitUntil(() -> DriverStation.getMatchTime() < Constants.LED2023_Constants.timeLeftAtEndGameWarning)
+      .andThen(led2023.showEndgameWarning_Command(leds))
+      .schedule();
   }
 
   /**
@@ -137,9 +155,11 @@ public class RobotContainer {
     wristIn.whileTrue(new WristBasic(WristBasicStates.IN, 1));
     clawOpenBuildDelayed.toggleOnTrue(new GoToLiftEncoder(GoToLiftStates.HIGH));
     clawCloseBuildDelayed.whileTrue(new GoToLiftEncoder(GoToLiftStates.LOW));
-    AutoBalanceButton.toggleOnTrue(new AutoBalance());
-    toggleLEDsBck.onTrue(new AddressLEDs(LEDCommands.CycleBack));
-    toggleLEDsFwd.onTrue(new AddressLEDs(LEDCommands.CycleFwd));
+    AutoBalanceButton.toggleOnTrue((new AutoBalance()).alongWith(led2023.showTilt_Command(leds, driver)));
+    //toggleLEDsBck.onTrue(new AddressLEDs(LEDCommands.CycleBack));
+    //toggleLEDsFwd.onTrue(new AddressLEDs(LEDCommands.CycleFwd));
+    toggleLEDsBck.onTrue(Commands.runOnce(() -> {leds.sendCommand(LED_Commands.CHANGE_MODE, (byte) LED_Modes.CYCLE_BACK.ordinal());}));
+    toggleLEDsFwd.onTrue(Commands.runOnce(() -> {leds.sendCommand(LED_Commands.CHANGE_MODE, (byte) LED_Modes.CYCLE_FORWARD.ordinal());}));
 
     //MIGRATED
     liftgotoLowestAuto.toggleOnTrue(new GoToLift(GoToLiftStates.LOW, 0.2));
@@ -163,5 +183,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
+  }
+
+  public static void showAllianceColor() {
+    led2023.showAllianceColour_Command(leds).schedule();
   }
 }

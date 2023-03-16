@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
   public static SwerveCommander commander;
   public static ClawAbsoluteEncoder cae;
   public static AddressableLEDInterface aledi;
-
+  
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -98,6 +98,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
+    RobotContainer.showAllianceColor();
   }
 
   /** This function is called periodically during autonomous. */

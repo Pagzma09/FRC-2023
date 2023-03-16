@@ -19,7 +19,8 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.I2C.Port;
+//import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.SPI;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -288,8 +289,25 @@ public final class Constants {
  {
     public static final int startChannel = 5;
     public static final int numChannels = 3;
-    public static final int numPatterns = 5;
+    public static final int numPatterns = 8;
+    public static final SPI.Port LED_Port = SPI.Port.kOnboardCS0;
+    
+    public static enum LED_Commands{SYNC, CHANGE_MODE, SET_TILT, SET_VOLTAGE, SET_ALLIANCE, SET_TIME_LEFT};
+    public static enum LED_Modes{RED_ALLIANCE, BLUE_ALLIANCE, OFF, CYCLE_BACK, CYCLE_FORWARD, ENDGAME_WARNING};
+    public static int numLEDS;
  }
+
+ public static class RoboNurse_Constants
+ {
+  public static double highBattery = 12.5; // 12V battery high voltage
+  public static double lowBattery = 6.5; // Brownout voltage
+ }
+
+ public static class LED2023_Constants
+ {
+  public static final int timeLeftAtEndGameWarning = 15;
+ }
+
  /*
   * TODO:
     - Finish Assigning CAN ID's for TalonFx's
