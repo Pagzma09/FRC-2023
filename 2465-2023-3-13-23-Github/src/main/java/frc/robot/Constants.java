@@ -19,6 +19,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 //import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -67,7 +68,11 @@ public final class Constants {
   public static TalonFX ClawSpin1;
   public static TalonFX ClawSpin2;
   
-
+  //LIGHTS
+  public static DigitalOutput p5;
+  public static DigitalOutput p6;
+  public static DigitalOutput p7;
+    
   public static void maininit()
   {
     driveinit();
@@ -295,6 +300,8 @@ public final class Constants {
     public static enum LED_Commands{SYNC, CHANGE_MODE, SET_TILT, SET_VOLTAGE, SET_ALLIANCE, SET_TIME_LEFT};
     public static enum LED_Modes{RED_ALLIANCE, BLUE_ALLIANCE, OFF, CYCLE_BACK, CYCLE_FORWARD, ENDGAME_WARNING};
     public static int numLEDS;
+
+
  }
 
  public static class RoboNurse_Constants
@@ -306,6 +313,13 @@ public final class Constants {
  public static class LED2023_Constants
  {
   public static final int timeLeftAtEndGameWarning = 15;
+ }
+
+ public static void lightsinit()
+ {
+   p5 = new DigitalOutput(5);
+   p6 = new DigitalOutput(6);
+   p7 = new DigitalOutput(7);
  }
 
  /*

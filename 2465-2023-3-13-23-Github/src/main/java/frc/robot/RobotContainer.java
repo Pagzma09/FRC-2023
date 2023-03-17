@@ -7,7 +7,8 @@ package frc.robot;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.LEDConstants.*;
-import frc.robot.commands.AddressLEDs;
+import frc.robot.commands.LightController;
+import frc.robot.commands.LightsBasic;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.Autos;
 import frc.robot.commands.CAEBasic;
@@ -22,7 +23,7 @@ import frc.robot.commands.InstantClawRotate;
 import frc.robot.commands.LiftBasic;
 import frc.robot.commands.StickDrive;
 import frc.robot.commands.WristBasic;
-import frc.robot.subsystems.AddressableLEDInterface;
+import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.ClawAbsoluteEncoder;
 import frc.robot.subsystems.Drive;
@@ -32,8 +33,7 @@ import frc.robot.subsystems.LED_2023_Subsystem;
 import frc.robot.subsystems.LED_Subsystem;
 import frc.robot.subsystems.RoboNurse_Subsystem;
 import frc.robot.subsystems.Lift;
-import frc.robot.subsystems.Wrist;
-import frc.robot.subsystems.AddressableLEDInterface.LEDCommands;
+import frc.robot.subsystems.Wrist;  
 import frc.robot.subsystems.Claw.ClawBasicStates;
 import frc.robot.subsystems.Extension.ExtensionBasicStates;
 import frc.robot.subsystems.Lift.GoToLiftStates;
@@ -67,6 +67,7 @@ public class RobotContainer {
   private final Claw clawer = Robot.claw;
   private final Wrist wrister = Robot.wrist;
   private final ClawAbsoluteEncoder caer = Robot.cae;
+  private final Lights lighter = Robot.lights;
   // private final AddressableLEDInterface aledier = Robot.aledi;
 
   // instaniating subysstems here per instructions at
@@ -118,6 +119,7 @@ public class RobotContainer {
     wrister.setDefaultCommand(new WristBasic(WristBasicStates.HOLD, 0));
     caer.setDefaultCommand(new CAEBasic());
     nurse.StartRoboNurse_Command(leds).schedule();
+    lighter.setDefaultCommand(new LightsBasic());
     Commands.waitUntil(() -> DriverStation.getMatchTime() < Constants.LED2023_Constants.timeLeftAtEndGameWarning)
       .andThen(led2023.showEndgameWarning_Command(leds))
       .schedule();
