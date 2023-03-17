@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,29 +23,31 @@ public class Extension extends SubsystemBase {
   private final SparkMaxPIDController extensionPID;
   public boolean extension_enc_troubleshooter = false;
   public static enum ExtensionBasicStates {OUT, IN, STOP};
-  private static double holder = 0;
+  public double holder = 0;
 
   public Extension() {
     extensionmotor.restoreFactoryDefaults();
 
     extensionPID = extensionmotor.getPIDController();
-    extensionPID.setP(0.0005);
+    extensionPID.setP(0.00001);
     extensionPID.setI(0);
     extensionPID.setD(ExtensionConstants.extensionD);
-    extensionPID.setFF(0.0005);
-    extensionPID.setOutputRange(-0.9, 0.9);
+    extensionPID.setFF(0.005);
+    extensionPID.setOutputRange(-0.5, 0.5);
     extensionPID.setFeedbackDevice(extensionmotor.getEncoder());
 
     
     extensionPID.setSmartMotionMaxVelocity(5000, 0);
     extensionPID.setSmartMotionMinOutputVelocity(1, 0);
-    extensionPID.setSmartMotionMaxAccel(1500, 0);
-    extensionPID.setSmartMotionAllowedClosedLoopError(1, 0);
+    extensionPID.setSmartMotionMaxAccel(2000, 0);
+    extensionPID.setSmartMotionAllowedClosedLoopError(2, 0);
     
     //extensionmotor.getEncoder().setInverted(true);
     extensionmotor.getEncoder().setPositionConversionFactor(1);
     extensionmotor.getEncoder().setPosition(0);
     holder = extensionmotor.getEncoder().getPosition();
+
+    extensionmotor.setIdleMode(IdleMode.kBrake);
 
     extensionmotor.burnFlash();
   }
@@ -67,8 +70,28 @@ public class Extension extends SubsystemBase {
 
   public double returnPIDError(double desired_pos)
   {
-    double error = Math.abs(extensionmotor.getEncoder().getPosition()) - desired_pos;
+    double error = Math.abs(desired_pos - extensionmotor.getEncoder().getPosition());
     return error;
+  }
+
+  public boolean getForward()
+  {
+    return forwardlimit.get();
+  }
+
+  public boolean getReverse()
+  {
+    return reverselimit.get();
+  }
+
+  public void setPositionEnc(double position)
+  {
+    extensionmotor.getEncoder().setPosition(position);
+  }
+
+  public double getPosition()
+  {
+    return extensionmotor.getEncoder().getPosition();
   }
 
   public void SmartDashValues()
@@ -76,8 +99,8 @@ public class Extension extends SubsystemBase {
     SmartDashboard.putBoolean("Forward Limit", forwardlimit.get());
     SmartDashboard.putBoolean("Reverse Limit", reverselimit.get());
     SmartDashboard.putNumber("Extension Position", extensionmotor.getEncoder().getPosition());
-    SmartDashboard.putBoolean("Extension Command Troubleshooter", extension_enc_troubleshooter);
-    SmartDashboard.putNumber("Position Conversion Factor", extensionmotor.getEncoder().getPositionConversionFactor());
-    SmartDashboard.putNumber("holder", holder);
+    //SmartDashboard.putBoolean("Extension Command Troubleshooter", extension_enc_troubleshooter);
+    //SmartDashboard.putNumber("Position Conversion Factor", extensionmotor.getEncoder().getPositionConversionFactor());
+    SmartDashboard.putNumber("Extension Holder", holder);
   }
 }

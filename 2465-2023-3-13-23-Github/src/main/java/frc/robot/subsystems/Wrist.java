@@ -23,7 +23,7 @@ public class Wrist extends SubsystemBase {
   private final CANSparkMax wristMotor = Constants.wrist;
   private final SparkMaxPIDController wristPID;
   private final RelativeEncoder wristCoder;
-  public static double desired_wrist_pos;
+  public double desired_wrist_pos;
   public static enum WristBasicStates {OUT, IN, HOLD};
   /** Creates a new Wrist. */
   public Wrist() {
@@ -34,10 +34,10 @@ public class Wrist extends SubsystemBase {
     wristPID.setI(wristConstants.wristI);
     wristPID.setD(wristConstants.wristD);
     wristPID.setOutputRange(wristConstants.wristMinOut, wristConstants.wristMaxOut);
-    wristPID.setFeedbackDevice(wristCoder);
-    wristPID.setPositionPIDWrappingEnabled(false);
+    //wristPID.setFeedbackDevice(wristCoder);
+    //wristPID.setPositionPIDWrappingEnabled(false);
 
-    wristCoder.setPosition(0);
+   // wristCoder.setPosition(0);
 
     desired_wrist_pos = wristCoder.getPosition();
   }
@@ -62,9 +62,10 @@ public class Wrist extends SubsystemBase {
     } 
     */
 
-    wristPID.setReference(desired_wrist_pos, ControlType.kPosition);
+   // wristPID.setReference(desired_wrist_pos, ControlType.kPosition);
   }
 
+  /* 
   public void hold()
   {
     if(desired_wrist_pos != 0)
@@ -76,6 +77,7 @@ public class Wrist extends SubsystemBase {
       wristMotor.set(0);
     }
   }
+  */
 
   public double getPosition()
   {
@@ -95,13 +97,12 @@ public class Wrist extends SubsystemBase {
     }
     */
     
-    wristPID.setReference(Position, ControlType.kPosition);
-    desired_wrist_pos = Position;
+   // wristPID.setReference(Position, ControlType.kPosition);
+    //desired_wrist_pos = Position;
   }
 
   public void SmartDashValues()
   {
-    SmartDashboard.putNumber("Wrist Pos", wristCoder.getPosition());
-    SmartDashboard.putNumber("Desired Wrist Pos", desired_wrist_pos);
+   
   }
 }

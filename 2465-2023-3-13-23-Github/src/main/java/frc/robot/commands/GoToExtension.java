@@ -4,22 +4,18 @@
 
 package frc.robot.commands;
 
-import javax.lang.model.util.ElementScanner14;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.Extension;
 import frc.robot.subsystems.Extension.ExtensionBasicStates;
 
-public class ExtensionBasic extends CommandBase {
-  /** Creates a new ExtensionBasic. */
-
-  //-expl Initialize extension, state, and power variables
+public class GoToExtension extends CommandBase {
+  /** Creates a new GoToExtension. */
   private final Extension extensioner = Robot.extension;
   private final ExtensionBasicStates state;
   private final double power;
-  public ExtensionBasic(ExtensionBasicStates state, double power) {
-    //-expl Set variables
+  private boolean isDone = false;
+  public GoToExtension(ExtensionBasicStates state, double power) {
     this.state = state;
     this.power = power;
     addRequirements(extensioner);
@@ -28,44 +24,42 @@ public class ExtensionBasic extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    isDone = false;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //-expl Switch on state. Intutive.
     switch(state)
     {
       case OUT:
       if(extensioner.getForward())
       {
-      extensioner.setPower(power);
+        extensioner.setPower(power);
       }
       else
       {
-      extensioner.setPower(0);
+        extensioner.setPower(0);
+        isDone = true;
       }
       break;
 
       case IN:
       if(extensioner.getReverse())
       {
-      extensioner.setPower(-power);
+        extensioner.setPower(-power);
       }
       else
       {
-      extensioner.setPower(0);
-      extensioner.setPositionEnc(0);  
+        extensioner.setPower(0);
+        isDone = true;
       }
       break;
-      
+
       case STOP:
       extensioner.setPower(0);
-
-      if(Math.abs(extensioner.holder) > 0)
-      {
-        extensioner.setPosition(extensioner.holder);
-      }
+      isDone = true;
       break;
     }
   }
@@ -77,6 +71,13 @@ public class ExtensionBasic extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(isDone)
+    {
+      return true;
+    }
+    else
+    {
     return false;
+    }
   }
 }

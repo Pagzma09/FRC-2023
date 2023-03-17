@@ -10,13 +10,13 @@ import frc.robot.Robot;
 import frc.robot.subsystems.Extension;
 import frc.robot.subsystems.Lift;
 
-public class GoToExtensionEncoder extends CommandBase {
+public class GoToExtensionEncoderNK extends CommandBase {
   /** Creates a new GoToExtensionEncoder. */
   private final Extension extender = Robot.extension;
   private final Lift lifter = Robot.lift;
-  private boolean kickback_error = false;
+  //private boolean kickback_error = false;
   private final double pos;
-  public GoToExtensionEncoder(double pos) {
+  public GoToExtensionEncoderNK(double pos) {
     this.pos = pos;
     addRequirements(extender);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -26,28 +26,32 @@ public class GoToExtensionEncoder extends CommandBase {
   @Override
   public void initialize() {
     extender.extension_enc_troubleshooter = false;
-    kickback_error = false;
+    //kickback_error = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(lifter.getPos() > 20)
-    {
+    //if(lifter.getPos() > 20)
+   // {
     extender.setPosition(pos);
-    }
-    else
-    {
-      DriverStation.reportError("KICKBACK! PLEASE RAISE THE LIFT!", kickback_error);
-      kickback_error = true;
-    }
+    //}
+    //else
+    //{
+      //DriverStation.reportError("KICKBACK! PLEASE RAISE THE LIFT!", kickback_error);
+      //kickback_error = true;
+    //}
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if(!extender.getForward() || !extender.getReverse())
+    {
     extender.setPosition(extender.getPosition());
+    }
     extender.extension_enc_troubleshooter = true;
+
   }
 
   // Returns true when the command should end.
@@ -57,12 +61,12 @@ public class GoToExtensionEncoder extends CommandBase {
     {
       return true;
     }
-    else if(pos < 50 && !extender.getReverse())
+    else if(pos < 10 && !extender.getReverse())
     {
       return true;
     }
-    
-    if(extender.returnPIDError(pos) < 2 || kickback_error)
+
+    if(extender.returnPIDError(pos) < 2)
     {
       return true;
     }

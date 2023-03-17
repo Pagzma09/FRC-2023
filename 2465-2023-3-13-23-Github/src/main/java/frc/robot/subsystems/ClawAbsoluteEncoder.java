@@ -22,22 +22,30 @@ public class ClawAbsoluteEncoder extends SubsystemBase {
   private final SparkMaxPIDController clawPID;
   public double desired_position;
   public ClawAbsoluteEncoder() {
+    //claw.restoreFactoryDefaults();
     clawcoder = claw.getAbsoluteEncoder(Type.kDutyCycle);
     clawcoder.setInverted(false);
+    //clawcoder.setPositionConversionFactor(360);
 
     clawPID = claw.getPIDController();
-    clawPID.setP(0.05);
+    clawPID.setP(0.0005);
     clawPID.setI(clawConstants.clawRotateI);
     clawPID.setD(clawConstants.clawRotateD);
+    clawPID.setFF(0.005);
     clawPID.setOutputRange(clawConstants.clawMinOut, clawConstants.clawMaxOut);
-    clawPID.setPositionPIDWrappingEnabled(false);
-    clawPID.setPositionPIDWrappingMaxInput(0.3);
+    clawPID.setPositionPIDWrappingEnabled(true);
+    clawPID.setPositionPIDWrappingMaxInput(1);
     clawPID.setPositionPIDWrappingMinInput(0);
     clawPID.setFeedbackDevice(clawcoder);
 
-    //clawPID.setSmartMotionAllowedClosedLoopError(0.01, 0);
+    //clawPID.setSmartMotionAllowedClosedLoopError(0.01, 0)
+    clawPID.setSmartMotionMaxVelocity(1000, 0);
+    clawPID.setSmartMotionMinOutputVelocity(0, 0);
+    clawPID.setSmartMotionMaxAccel(200, 0);
+    clawPID.setSmartMotionAllowedClosedLoopError(0.005, 0);
     
     desired_position = clawcoder.getPosition();
+    //claw.burnFlash();
 
   }
 
@@ -51,7 +59,7 @@ public class ClawAbsoluteEncoder extends SubsystemBase {
   public void goToPosition(double position)
   {
     desired_position = position;
-    clawPID.setReference(desired_position, CANSparkMax.ControlType.kPosition);
+    clawPID.setReference(position, CANSparkMax.ControlType.kSmartMotion);
   }
 
   public double getPosition()

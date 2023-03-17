@@ -4,19 +4,29 @@
 
 package frc.robot;
 
+import java.util.Random;
+import java.util.random.RandomGenerator;
+
+import com.ctre.phoenix.led.RainbowAnimation;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.AutoBasic;
-import frc.robot.commands.SwerveCommander;
-import frc.robot.subsystems.Lights;
+import frc.robot.commands.AutoBalanceV2;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.ClawAbsoluteEncoder;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Extension;
 import frc.robot.subsystems.Lift;
+import frc.robot.subsystems.Lights;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.WristAbsoluteEncoder;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -33,10 +43,13 @@ public class Robot extends TimedRobot {
   public static Extension extension;
   public static Claw claw;
   public static Wrist wrist;
-  public static SwerveCommander commander;
   public static ClawAbsoluteEncoder cae;
+  public static WristAbsoluteEncoder wae;
+  public static Limelight limelight;
   public static Lights lights;
-  
+  private SendableChooser<Command> autoChooser;
+  private Random justforfunnzez;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -50,11 +63,20 @@ public class Robot extends TimedRobot {
     lift = new Lift();
     extension = new Extension();
     claw = new Claw();
-    wrist = new Wrist();
     cae = new ClawAbsoluteEncoder();
+    wrist = new Wrist();
+    wae = new WristAbsoluteEncoder();
+    limelight = new Limelight();
     lights = new Lights();
     m_robotContainer = new RobotContainer();
-    commander = new SwerveCommander();
+    autoChooser = new SendableChooser<>();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+
+    drive.zeroHeading();
+
+    justforfunnzez = new Random();
+    lights.light_controller = 5;
+  
   }
 
   /**
@@ -76,24 +98,47 @@ public class Robot extends TimedRobot {
     extension.SmartDashValues();
     claw.SmartDashValues();
     wrist.SmartDashValues();
+    lights.SmartDashValues();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    int boundsforfun = 7;
+
+    int sonicsays = justforfunnzez.nextInt(boundsforfun);
+
+    if(sonicsays == 7)
+    {
+      sonicsays = 6;
+    }
+
+    lights.light_controller = 5;
+    
+  }
 
   @Override
   public void disabledPeriodic() {
     claw.clawDesiredPosition = claw.getPosition();
     wrist.desired_wrist_pos = wrist.getPosition();
-    cae.desired_position = cae.getPosition();
+
+    if(lift.V2holder != 0)
+    {
+      lift.V2holder = lift.getPos();
+    }
+    
+    if(extension.holder != 0)
+    {
+      extension.holder = extension.getPosition();
+    }
+    //cae.desired_position = cae.getPosition();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = new AutoBasic();
-
+    m_autonomousCommand = autoChooser.getSelected();
+    
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -108,6 +153,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    //drive.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -115,6 +161,12 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    else
+    {
+      drive.resetOdometry(new Pose2d(0,0, new Rotation2d(Math.toRadians(0))));
+    }
+
+    limelight.setPos(0);
   }
 
   /** This function is called periodically during operator control. */

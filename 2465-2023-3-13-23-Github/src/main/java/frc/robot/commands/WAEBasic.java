@@ -4,22 +4,16 @@
 
 package frc.robot.commands;
 
-import javax.swing.SwingWorker.StateValue;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.subsystems.Wrist;
-import frc.robot.subsystems.Wrist.WristBasicStates;
+import frc.robot.subsystems.ClawAbsoluteEncoder;
+import frc.robot.subsystems.WristAbsoluteEncoder;
 
-public class WristBasic extends CommandBase {
-  /** Creates a new WristBasicState. */
-  private final Wrist wrister = Robot.wrist;
-  private final WristBasicStates state;
-  private final double enacted_input;
-  public WristBasic(WristBasicStates state, double enacted_input) {
-    this.state = state;
-    this.enacted_input = enacted_input;
-    addRequirements(wrister);
+public class WAEBasic extends CommandBase {
+  /** Creates a new CAEBasic. */
+  private final WristAbsoluteEncoder waer = Robot.wae;
+  public WAEBasic() {
+    addRequirements(waer);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -30,22 +24,7 @@ public class WristBasic extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    switch(state)
-    {
-      //-expl Set wrist to desired position
-
-      case OUT:
-      wrister.setPos(enacted_input);
-      break;
-
-      case IN:
-      wrister.setPos(-enacted_input);
-      break;
-
-      case HOLD:
-      //wrister.hold();
-      break;
-    }
+    
   }
 
   // Called once the command ends or is interrupted.

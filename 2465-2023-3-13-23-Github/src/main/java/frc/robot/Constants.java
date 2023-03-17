@@ -18,8 +18,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.Servo;
 //import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -62,17 +65,21 @@ public final class Constants {
 
   //WRIST
   public static CANSparkMax wrist;
-
   //CLAW
   public static CANSparkMax ClawRotate;
   public static TalonFX ClawSpin1;
   public static TalonFX ClawSpin2;
-  
+
+  //LIMELIGHT
+  public static NetworkTable limelight;
+  public static Servo limelightpivot;
+
   //LIGHTS
   public static DigitalOutput p5;
   public static DigitalOutput p6;
   public static DigitalOutput p7;
-    
+  
+
   public static void maininit()
   {
     driveinit();
@@ -84,16 +91,21 @@ public final class Constants {
     wristinit();
 
     clawinit();
+
+    limelight();
+
+    lightsinit();
   }
 
   static void driveinit()
   {
     imu = new AHRS();
+    //imu.reset();
 
     frontLeftDrive = new CANSparkMax(1, MotorType.kBrushless);
     frontLeftDrive.setInverted(false);
     frontLeftDrive.setIdleMode(IdleMode.kCoast);
-    frontLeftDrive.setInverted(true);
+   // frontLeftDrive.setInverted(true);
 
     frontLeftRotate = new CANSparkMax(2, MotorType.kBrushless);
     frontLeftRotate.setInverted(false);
@@ -157,7 +169,7 @@ public final class Constants {
     public static final double kaVoltSecondsSquaredPerMeter = 0.49753;
     public static final double kPDriveVel = 3.1331;
 
-    public static final double kMaxSpeedMetersPerSecond = Units.feetToMeters(3);
+    public static final double kMaxSpeedMetersPerSecond = Units.feetToMeters(25);
     public static final double kMaxAngularSpeed = Math.PI;
   }
 
@@ -179,9 +191,9 @@ public final class Constants {
   public static final double kDriveP = 0.5;
   public static final double kDriveI = 0;
   public static final double kDriveD = 0;
-  public static final double kDriveFF = 1/DriveRPSec;
-  public static final double kMinDriveOutput = -0.85;
-  public static final double kMaxDriveOutput = 0.85;
+  public static final double kDriveFF = 0.05;
+  public static final double kMinDriveOutput = -1;
+  public static final double kMaxDriveOutput = 1;
 
   public static final double kTurnP = 0.5;
   public static final double kTurnI = 0;
@@ -197,14 +209,15 @@ public final class Constants {
 
  public static class AutoConstants
  {
-   public static final double aMaxMetersPerSecond = Units.feetToMeters(11);
+   public static final double aMaxMetersPerSecond = Units.feetToMeters(25);
    public static final double aMaxAccelerationMetersPerSecondSquared = Units.feetToMeters(5);
    public static final double aMaxAngularSpeedRadiansPerSecond = Math.PI*2;
    public static final double aMaxAngularAccelRadiansPerSecondSquared = Math.PI;
+   public static final double aMaxMetersPerSecondDrive = Units.feetToMeters(40);
 
-   public static final double kPXController = DriveConstants.kPDriveVel;
-   public static final double kPYController = DriveConstants.kPDriveVel;
-   public static final double kPThetaController = 1;
+   public static final double kPXController = 4;
+   public static final double kPYController = 4;
+   public static final double kPThetaController = 4;
 
    public static final TrajectoryConfig config = new TrajectoryConfig(AutoConstants.aMaxMetersPerSecond, AutoConstants.aMaxAccelerationMetersPerSecondSquared);
 
@@ -239,7 +252,7 @@ public final class Constants {
   extension.set(0);
 
   forwardlimit = new DigitalInput(4);
-  reverselimit = new DigitalInput(9);
+  reverselimit = new DigitalInput(3);
  }
 
  public static class ExtensionConstants
@@ -254,8 +267,9 @@ public final class Constants {
  static void wristinit()
  {
   wrist = new CANSparkMax(11, MotorType.kBrushless);
-  wrist.setInverted(true);
-  wrist.set(0);
+  wrist.setIdleMode(IdleMode.kBrake);
+  //wrist.setInverted(true);
+  //wrist.set(0);
  }
 
  public static class wristConstants
@@ -269,7 +283,7 @@ public final class Constants {
 
  static void clawinit()
  {
-   ClawRotate = new CANSparkMax(12, MotorType.kBrushless);
+   ClawRotate = new CANSparkMax(14, MotorType.kBrushless);
    //ClawRotate.setInverted(true);
    ClawRotate.set(0);
 
@@ -315,6 +329,12 @@ public final class Constants {
   public static final int timeLeftAtEndGameWarning = 15;
  }
 
+ public static void limelight()
+ {
+  limelight = NetworkTableInstance.getDefault().getTable("limelight-lime");
+  limelightpivot = new Servo(1);
+ }
+
  public static void lightsinit()
  {
    p5 = new DigitalOutput(5);
@@ -322,15 +342,9 @@ public final class Constants {
    p7 = new DigitalOutput(7);
  }
 
- /*
-  * TODO:
-    - Finish Assigning CAN ID's for TalonFx's
-    - Finish Claw rudimentary code
-    - Get Grabber working
-    - Calibrate wrist encoder
-    - SysID
-    - Test Auto Code
-    - Install HAL's for lift and extension
-  */
+ public static class ContainerConstants
+ {
+  
+ }
 
 }

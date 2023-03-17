@@ -56,18 +56,28 @@ public class LiftBasic extends CommandBase {
       }
       else
       {
-        lifter.setPower(0);
+        //lifter.setPower(0);
       }
       break;
 
       //-expl Set power to be 0
       case STOP:
-      lifter.setPower(0);
+      if(lifter.V2holder != 0 && lifter.V2holder > 5)
+      {
+        lifter.setSmartPos(lifter.V2holder);
+      }
+      else
+      {
+        lifter.setPower(0);
+      }
 
+      /* 
       if(!lifter.lowLimit() && Math.abs(lifter.getPos()) > 1)
       {
         lifter.setPos(0);
       }
+      */
+      
       break;
     }
   }

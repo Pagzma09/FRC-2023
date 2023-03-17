@@ -45,7 +45,7 @@ public class Claw extends SubsystemBase {
    // clawRotatePID.setPositionPIDWrappingEnabled(true);
    // clawRotatePID.setPositionPIDWrappingMaxInput(0.4);
    // clawRotatePID.setPositionPIDWrappingMinInput(0);
-    //clawRotatePID.setFeedbackDevice(clawEncoder);
+   // clawRotatePID.setFeedbackDevice(clawEncoder);
   
 
     clawDesiredPosition = clawEncoder.getPosition();
@@ -118,7 +118,7 @@ public class Claw extends SubsystemBase {
 
   public void SmartDashValues()
   {
-    SmartDashboard.putNumber("Claw Rotate Position", clawEncoder.getPosition());
-    SmartDashboard.putNumber("Desired Claw Position", clawDesiredPosition);
+    //SmartDashboard.putNumber("Claw Rotate Position", clawEncoder.getPosition());
+    //SmartDashboard.putNumber("Desired Claw Position", clawDesiredPosition);
   }
 }

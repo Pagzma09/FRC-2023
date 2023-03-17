@@ -22,6 +22,7 @@ import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 
@@ -69,6 +70,8 @@ public class Drive extends SubsystemBase {
      rearLeft.getPosition(),
      rearRight.getPosition()
    });
+
+  public boolean commandutil = false; 
 
   /** Creates a new Drive. */
   public Drive() {
@@ -122,6 +125,20 @@ public class Drive extends SubsystemBase {
     rearRight.setDesiredState(swerveModuleStates[3]);
   }
 
+  public void strongDrive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    var swerveModuleStates =
+        Constants.kinematics.toSwerveModuleStates(
+            fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
+                : new ChassisSpeeds(xSpeed, ySpeed, rot));
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        swerveModuleStates, AutoConstants.aMaxMetersPerSecondDrive);
+    frontLeft.setDesiredState(swerveModuleStates[0]);
+    frontRight.setDesiredState(swerveModuleStates[1]);
+    rearLeft.setDesiredState(swerveModuleStates[2]);
+    rearRight.setDesiredState(swerveModuleStates[3]);
+  }
+  
   public void slewdrive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
     
     double xSpeedCommanded;
@@ -212,6 +229,7 @@ public class Drive extends SubsystemBase {
     gyro.reset();
   }
 
+
   public double getHeading() {
     return gyro.getRotation2d().getDegrees();
   }
@@ -233,6 +251,8 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Pitch", getPitch());
     SmartDashboard.putNumber("Odometry X Inches", Units.metersToInches(odometry.getPoseMeters().getX()));
     SmartDashboard.putNumber("Odometry Y Inches", Units.metersToInches(odometry.getPoseMeters().getY()));
+    SmartDashboard.putNumber("R2D", gyro.getRotation2d().getDegrees());
+    //SmartDashboard.putBoolean("CommandUtil", commandutil);
     //SmartDashboard.putNumber("Max Radians", odometry.getPoseMeters().)
   }
 
