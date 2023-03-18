@@ -22,7 +22,9 @@ import frc.robot.commands.InstantClawRotate;
 import frc.robot.commands.LiftBasic;
 import frc.robot.commands.LightController;
 import frc.robot.commands.LightsBasic;
+import frc.robot.commands.LightsV2_ChargedUpSpecific;
 import frc.robot.commands.LimelightSetPivot;
+import frc.robot.commands.LightsV2_Commands;
 import frc.robot.commands.StickDrive;
 import frc.robot.commands.WAEBasic;
 import frc.robot.commands.WAEOperator;
@@ -32,8 +34,7 @@ import frc.robot.subsystems.ClawAbsoluteEncoder;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Extension;
-import frc.robot.subsystems.LED_2023_Subsystem;
-import frc.robot.subsystems.LED_Subsystem;
+import frc.robot.subsystems.LightsV2;
 import frc.robot.subsystems.Lift;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Limelight;
@@ -44,7 +45,6 @@ import frc.robot.subsystems.Extension.ExtensionBasicStates;
 import frc.robot.subsystems.Lift.GoToLiftStates;
 import frc.robot.subsystems.Lift.LiftBasicStates;
 import frc.robot.subsystems.Lights.Light_Controller_States;
-import frc.robot.subsystems.RoboNurse_Subsystem;
 import frc.robot.subsystems.Wrist.WristBasicStates;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -78,14 +78,13 @@ public class RobotContainer {
   private final WristAbsoluteEncoder waer = Robot.wae;
   private final Lights lighter = Robot.lights;
   private final Limelight limelighter = Robot.limelight;
+  public static LightsV2 lightsvtwoer = new LightsV2();
+
   // instaniating subysstems here per instructions at
   // https://docs.wpilib.org/en/stable/docs/software/commandbased/structuring-command-based-project.html
   // (Note ExampleSubsystem above also instanciated here)
-  public static LED_Subsystem leds = new LED_Subsystem();;
-  public static RoboNurse_Subsystem nurse =  new RoboNurse_Subsystem();
-  public static LED_2023_Subsystem led2023 = new LED_2023_Subsystem();
 
-
+  // ? private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();?
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -162,8 +161,9 @@ public class RobotContainer {
     caer.setDefaultCommand(new CAEBasic());
     waer.setDefaultCommand(new WAEBasic());
     lighter.setDefaultCommand(new LightsBasic());
-    nurse.StartRoboNurse_Command(leds).schedule();
     //limelighter.setDefaultCommand(new LimelightSetPivot(limelighter.limepivpos));
+    
+    LightsV2_Commands.ShowBatteryState(lightsvtwoer).schedule();
   }
 
   /**
@@ -256,8 +256,8 @@ public class RobotContainer {
 
     d9.toggleOnTrue(new LightController(Light_Controller_States.ADD));
     d10.toggleOnTrue(new LightController(Light_Controller_States.SUBTRACT));
-    d9.onTrue(Commands.runOnce(() -> {leds.sendCommand(LED_Commands.CHANGE_MODE, (byte) LED_Modes.CYCLE_BACK.ordinal());}));
-    d10.onTrue(Commands.runOnce(() -> {leds.sendCommand(LED_Commands.CHANGE_MODE, (byte) LED_Modes.CYCLE_FORWARD.ordinal());}));
+    d9.onTrue(LightsV2_ChargedUpSpecific.requestCube(lightsvtwoer));
+    d10.onTrue(LightsV2_ChargedUpSpecific.requestCone(lightsvtwoer));
     yButton.toggleOnTrue(new LimelightSetPivot(0));
     aButton.toggleOnTrue(new LimelightSetPivot(0.25));
     bButton.toggleOnTrue(new LimelightSetPivot(0.125));
@@ -274,8 +274,9 @@ public class RobotContainer {
     return Autos.exampleAuto(m_exampleSubsystem);
   }
 
+  //This function exists as an interface between the Imperative (code in Robot.java), and the Declarative (code everywhere else).
   public static void showAllianceColor() {
-    led2023.showAllianceColour_Command(leds).schedule();
+    LightsV2_Commands.showAllianceColour(lightsvtwoer).schedule();
   }
 
 }

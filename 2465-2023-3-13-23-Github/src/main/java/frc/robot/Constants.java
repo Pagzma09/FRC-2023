@@ -306,28 +306,16 @@ public final class Constants {
 
  public static class LEDConstants
  {
-    public static final int startChannel = 5;
-    public static final int numChannels = 3;
     public static final int numPatterns = 8;
+
     public static final SPI.Port LED_Port = SPI.Port.kOnboardCS0;
-    
-    public static enum LED_Commands{SYNC, CHANGE_MODE, SET_TILT, SET_VOLTAGE, SET_ALLIANCE, SET_TIME_LEFT};
-    public static enum LED_Modes{RED_ALLIANCE, BLUE_ALLIANCE, OFF, CYCLE_BACK, CYCLE_FORWARD, ENDGAME_WARNING};
-    public static int numLEDS;
+    public static enum LED_Commands{SYNC, CHANGE_MODE, TILT, VOLTAGE, TIME_LEFT, RED_ALLIANCE, BLUE_ALLIANCE, OFF, REQUEST_CUBE, REQUEST_CONE, ENDGAME_WARNING};
+    public static int numLEDS = 100;
+    public static double highBattery = 12.5; // 12V battery high voltage
+    public static double lowBattery = 6.5; // Brownout voltage
+    public static final int secondsLeftBeforeEndGameWarning = 15;
+  }
 
-
- }
-
- public static class RoboNurse_Constants
- {
-  public static double highBattery = 12.5; // 12V battery high voltage
-  public static double lowBattery = 6.5; // Brownout voltage
- }
-
- public static class LED2023_Constants
- {
-  public static final int timeLeftAtEndGameWarning = 15;
- }
 
  public static void limelight()
  {

@@ -5,14 +5,13 @@ import static frc.robot.Constants.LEDConstants.LED_Port;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants.LED_Commands;
-import frc.robot.Constants.LEDConstants.LED_Modes;
 
-public class LED_Subsystem extends SubsystemBase{
+public class LightsV2 extends SubsystemBase {
 
     private static SPI LED_SPI = new SPI(LED_Port);
 
 
-    public LED_Subsystem(){
+    public LightsV2 () {
         LED_SPI.setMode(SPI.Mode.kMode0);
     }
 
