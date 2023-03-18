@@ -16,7 +16,7 @@ public class LightsV2_Commands {
                 (LEDConstants.numLEDS) / (LEDConstants.highBattery - LEDConstants.lowBattery) *
                 (RobotController.getBatteryVoltage() - LEDConstants.lowBattery)
             ));
-        });
+        }).ignoringDisable(true);
     }   
 
     // -expl Shows our alliance colour!
@@ -25,7 +25,7 @@ public class LightsV2_Commands {
             lightsvtwoer.sendCommand(
                 (DriverStation.getAlliance()==Alliance.Blue) ? LED_Commands.BLUE_ALLIANCE:LED_Commands.RED_ALLIANCE, (byte) 0
             );
-        }).andThen(lightsvtwoer.run(() -> {}));
+        }).andThen(lightsvtwoer.run(() -> {})).ignoringDisable(true);
     }
 
     //-expl Give the human player a visual end-game warning secondsLeftBeforeEndGameWarning seconds before the game ends.
@@ -34,7 +34,7 @@ public class LightsV2_Commands {
 
         return lightsvtwoer.runOnce(() -> {
             lightsvtwoer.sendCommand(LED_Commands.TIME_LEFT, (byte) DriverStation.getMatchTime());
-        }).andThen(lightsvtwoer.run(() -> {}));
+        }).andThen(lightsvtwoer.run(() -> {})).ignoringDisable(true);
     }
 
 }
