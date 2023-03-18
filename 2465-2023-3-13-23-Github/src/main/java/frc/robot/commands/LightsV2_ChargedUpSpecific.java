@@ -18,8 +18,12 @@ public class LightsV2_ChargedUpSpecific {
         Command previousCommand = lightsvtwoer.getCurrentCommand();
         return lightsvtwoer.runOnce(() -> {
             lightsvtwoer.sendCommand(LED_Commands.REQUEST_CUBE, (byte) 0);
+        }).ignoringDisable(true)
+        .andThen(Commands.waitSeconds(3))
+        .andThen(Commands.runOnce(() -> {
             previousCommand.initialize();
-        }).ignoringDisable(true).andThen(Commands.waitSeconds(3)).andThen(previousCommand);
+            previousCommand.schedule();
+        }).ignoringDisable(true));
     }
 
     public static Command requestCone(LightsV2 lightsvtwoer) {
@@ -27,6 +31,11 @@ public class LightsV2_ChargedUpSpecific {
         return lightsvtwoer.runOnce(() -> {
             lightsvtwoer.sendCommand(LED_Commands.REQUEST_CONE, (byte) 0);
             previousCommand.initialize();
-        }).ignoringDisable(true).andThen(Commands.waitSeconds(3)).andThen(previousCommand);
+        }).ignoringDisable(true)
+        .andThen(Commands.waitSeconds(3))
+        .andThen(Commands.runOnce(() -> {
+            previousCommand.initialize();
+            previousCommand.schedule();
+        }).ignoringDisable(true));
     }
 }

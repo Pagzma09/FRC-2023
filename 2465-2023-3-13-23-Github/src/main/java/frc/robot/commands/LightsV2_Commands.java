@@ -25,7 +25,7 @@ public class LightsV2_Commands {
             lightsvtwoer.sendCommand(
                 (DriverStation.getAlliance()==Alliance.Blue) ? LED_Commands.BLUE_ALLIANCE:LED_Commands.RED_ALLIANCE, (byte) 0
             );
-        }).andThen(lightsvtwoer.run(() -> {})).ignoringDisable(true);
+        }).ignoringDisable(true).andThen(lightsvtwoer.run(() -> {})).ignoringDisable(true);
     }
 
     //-expl Give the human player a visual end-game warning secondsLeftBeforeEndGameWarning seconds before the game ends.
@@ -34,7 +34,12 @@ public class LightsV2_Commands {
 
         return lightsvtwoer.runOnce(() -> {
             lightsvtwoer.sendCommand(LED_Commands.TIME_LEFT, (byte) DriverStation.getMatchTime());
-        }).andThen(lightsvtwoer.run(() -> {})).ignoringDisable(true);
+        }).ignoringDisable(true)
+        .andThen(Commands.waitSeconds(3))
+        .andThen(Commands.runOnce(() -> {
+            previousCommand.initialize();
+            previousCommand.schedule();
+        }).ignoringDisable(true));
     }
 
 }
