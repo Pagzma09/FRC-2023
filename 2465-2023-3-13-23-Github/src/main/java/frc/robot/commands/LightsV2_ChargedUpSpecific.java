@@ -15,27 +15,32 @@ public class LightsV2_ChargedUpSpecific {
     }
   
     public static Command requestCube(LightsV2 lightsvtwoer) {
-        Command previousCommand = lightsvtwoer.getCurrentCommand();
-        return lightsvtwoer.runOnce(() -> {
-            lightsvtwoer.sendCommand(LED_Commands.REQUEST_CUBE, (byte) 0);
-        })
-        .andThen(Commands.waitSeconds(3))
-        .andThen(Commands.runOnce(() -> {
-            previousCommand.initialize();
-            previousCommand.schedule();
-        }).ignoringDisable(true));
+        return Commands.runOnce(() -> {
+            Command previousCommand = lightsvtwoer.getCurrentCommand();
+            lightsvtwoer.runOnce(() -> {
+                System.out.println("Req'd cube");
+                lightsvtwoer.sendCommand(LED_Commands.REQUEST_CUBE, (byte) 0);
+            })
+            .andThen(Commands.waitSeconds(3))
+            .andThen(Commands.runOnce(() -> {
+                previousCommand.initialize();
+                previousCommand.schedule();
+            }, lightsvtwoer).ignoringDisable(true)).schedule();
+        });
     }
 
     public static Command requestCone(LightsV2 lightsvtwoer) {
-        Command previousCommand = lightsvtwoer.getCurrentCommand();
-        return lightsvtwoer.runOnce(() -> {
-            lightsvtwoer.sendCommand(LED_Commands.REQUEST_CONE, (byte) 0);
-            previousCommand.initialize();
-        })
-        .andThen(Commands.waitSeconds(3))
-        .andThen(Commands.runOnce(() -> {
-            previousCommand.initialize();
-            previousCommand.schedule();
-        }).ignoringDisable(true));
+        return Commands.runOnce(() -> {
+            Command previousCommand = lightsvtwoer.getCurrentCommand();
+            lightsvtwoer.runOnce(() -> {
+                System.out.println("Req'd cone");
+                lightsvtwoer.sendCommand(LED_Commands.REQUEST_CONE, (byte) 0);
+            })
+            .andThen(Commands.waitSeconds(3))
+            .andThen(Commands.runOnce(() -> {
+                previousCommand.initialize();
+                previousCommand.schedule();
+            }, lightsvtwoer).ignoringDisable(true)).schedule();
+        });
     }
 }

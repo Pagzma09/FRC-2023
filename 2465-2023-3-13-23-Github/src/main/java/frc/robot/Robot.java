@@ -56,6 +56,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    System.out.println("Hello world!");
     Constants.maininit();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -167,11 +168,13 @@ public class Robot extends TimedRobot {
     }
 
     limelight.setPos(0);
+    RobotContainer.prepEndgameWarning();
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   @Override
   public void testInit() {

@@ -10,7 +10,7 @@ import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.LightsV2;
 
 public class LightsV2_Commands {    
-    public static Command ShowBatteryState(LightsV2 lightsvtwoer) {
+    public static Command showBatteryState(LightsV2 lightsvtwoer) {
         return lightsvtwoer.run(() -> {
             lightsvtwoer.sendCommand(LED_Commands.VOLTAGE, (byte) (
                 (LEDConstants.numLEDS) / (LEDConstants.highBattery - LEDConstants.lowBattery) *
@@ -31,17 +31,27 @@ public class LightsV2_Commands {
     }
 
     //-expl Give the human player a visual end-game warning secondsLeftBeforeEndGameWarning seconds before the game ends.
-    public static Command showEndgameWarning(LightsV2 lightsvtwoer){
-        Command previousCommand = lightsvtwoer.getCurrentCommand();
+    public static Command prepEndgameWarning(LightsV2 lightsvtwoer){
+        return Commands.runOnce(() -> {
+            Command previousCommand = lightsvtwoer.getCurrentCommand();
+            lightsvtwoer.runOnce(() -> {
+                lightsvtwoer.sendCommand(LED_Commands.TIME_LEFT, (byte) DriverStation.getMatchTime());
+            })
+            .andThen(Commands.waitSeconds(3))
+            .andThen(Commands.runOnce(() -> {
+                previousCommand.initialize();
+                previousCommand.schedule();
+            }, lightsvtwoer).ignoringDisable(true)).schedule();            
+        });
+    }
 
-        return lightsvtwoer.runOnce(() -> {
-            lightsvtwoer.sendCommand(LED_Commands.TIME_LEFT, (byte) DriverStation.getMatchTime());
-        })
-        .andThen(Commands.waitSeconds(3))
-        .andThen(Commands.runOnce(() -> {
-            previousCommand.initialize();
-            previousCommand.schedule();
-        }).ignoringDisable(true));
+    public static Command endgameCountdown(LightsV2 lightsvtwoer){
+        return lightsvtwoer.run(() -> {
+            lightsvtwoer.sendCommand(LED_Commands.VOLTAGE, (byte) 
+                ((DriverStation.getMatchTime() / secondsLeftBeforeCountdown) 
+                * numLEDS));
+        });
     }
 
 }
+    

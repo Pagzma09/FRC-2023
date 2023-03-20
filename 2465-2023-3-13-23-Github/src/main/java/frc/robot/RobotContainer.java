@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.LEDConstants.*;
 import frc.robot.commands.Autos;
@@ -50,6 +51,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -90,7 +92,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  public static final Joystick controller = new Joystick(1);    
+  public static final Joystick controller = new Joystick(1);
   private static final Joystick buttonboard = new Joystick(2);
   //private static final Joystick experimental = new Joystick(3);
   private static final Joystick DreamJoystick = new Joystick(5);
@@ -143,8 +145,8 @@ public class RobotContainer {
   private static final POVButton c0 = new POVButton(buttonBoardClawStick, 0);
   private static final POVButton c180 = new POVButton(buttonBoardClawStick, 180);
 
-  private static final JoystickButton d9 = new JoystickButton(controller, 9);
-  private static final JoystickButton d10 = new JoystickButton(controller, 10);
+  private static final JoystickButton d7 = new JoystickButton(controller, 7);
+  private static final JoystickButton d8 = new JoystickButton(controller, 8);
   private final JoystickButton yButton = new JoystickButton(controller, 4);
   private final JoystickButton aButton = new JoystickButton(controller, 1);
   private final JoystickButton bButton = new JoystickButton(controller, 2);
@@ -163,7 +165,7 @@ public class RobotContainer {
     lighter.setDefaultCommand(new LightsBasic());
     //limelighter.setDefaultCommand(new LimelightSetPivot(limelighter.limepivpos));
     
-    LightsV2_Commands.ShowBatteryState(lightsvtwoer).schedule();
+    LightsV2_Commands.showBatteryState(lightsvtwoer).schedule();
   }
 
   /**
@@ -254,10 +256,10 @@ public class RobotContainer {
     c0.whileTrue(new ClawBasic(ClawBasicStates.Spit, 0.15));
     c180.whileTrue(new ClawBasic(ClawBasicStates.Suck, 0.15));
 
-    d9.toggleOnTrue(new LightController(Light_Controller_States.ADD));
-    d10.toggleOnTrue(new LightController(Light_Controller_States.SUBTRACT));
-    d9.onTrue(LightsV2_ChargedUpSpecific.requestCube(lightsvtwoer));
-    d10.onTrue(LightsV2_ChargedUpSpecific.requestCone(lightsvtwoer));
+    //d9.toggleOnTrue(new LightController(Light_Controller_States.ADD));
+    //d10.toggleOnTrue(new LightController(Light_Controller_States.SUBTRACT));
+    d7.onTrue(LightsV2_ChargedUpSpecific.requestCube(lightsvtwoer));
+    d8.onTrue(LightsV2_ChargedUpSpecific.requestCone(lightsvtwoer));
     yButton.toggleOnTrue(new LimelightSetPivot(0));
     aButton.toggleOnTrue(new LimelightSetPivot(0.25));
     bButton.toggleOnTrue(new LimelightSetPivot(0.125));
@@ -276,7 +278,27 @@ public class RobotContainer {
 
   //This function exists as an interface between the Imperative (code in Robot.java), and the Declarative (code everywhere else).
   public static void showAllianceColor() {
-    LightsV2_Commands.showAllianceColour(lightsvtwoer).schedule();
+    LightsV2_Commands.showAllianceColour(lightsvtwoer).ignoringDisable(true).schedule();
   }
 
+  public static void prepEndgameWarning(){
+    Commands.waitSeconds(3)
+    .andThen(Commands.waitUntil(() -> 
+      {
+        return DriverStation.getMatchTime() < LEDConstants.secondsLeftBeforeEndGameWarning;
+      }))
+    .andThen(() ->
+      {
+        LightsV2_Commands.prepEndgameWarning(lightsvtwoer).ignoringDisable(true).schedule();
+      })
+    .andThen(Commands.waitUntil(() ->
+      {
+        return DriverStation.getMatchTime() < LEDConstants.secondsLeftBeforeCountdown;
+      }))
+    .andThen(() ->
+      {
+        LightsV2_Commands.endgameCountdown(lightsvtwoer).ignoringDisable(true).schedule();
+      })
+    .schedule();
+  }
 }

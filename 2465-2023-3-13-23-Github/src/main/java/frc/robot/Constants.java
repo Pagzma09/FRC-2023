@@ -310,9 +310,11 @@ public final class Constants {
 
     public static final SPI.Port LED_Port = SPI.Port.kOnboardCS0;
     public static enum LED_Commands{SYNC, CHANGE_MODE, TILT, VOLTAGE, TIME_LEFT, RED_ALLIANCE, BLUE_ALLIANCE, OFF, REQUEST_CUBE, REQUEST_CONE, ENDGAME_WARNING};
-    public static int numLEDS = 100;
-    public static double highBattery = 12.5; // 12V battery high voltage
+    public static int numLEDS = 150;
+    public static double highBattery = 13.0; // 12V battery high voltage
     public static double lowBattery = 6.5; // Brownout voltage
+
+    public static double secondsLeftBeforeCountdown = 5.0;
     public static final int secondsLeftBeforeEndGameWarning = 15;
   }
 

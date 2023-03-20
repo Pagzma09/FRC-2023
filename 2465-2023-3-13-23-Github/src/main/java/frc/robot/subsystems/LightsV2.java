@@ -13,6 +13,8 @@ public class LightsV2 extends SubsystemBase {
 
     public LightsV2 () {
         LED_SPI.setMode(SPI.Mode.kMode0);
+        LED_SPI.setClockRate(500000);
+        LED_SPI.setChipSelectActiveLow();
     }
 
     // -expl Every transaction consists of two bytes: a command, and a value. The value is based on the command, and the command is carefully chosen to convey a meaning.
@@ -34,6 +36,12 @@ public class LightsV2 extends SubsystemBase {
         byteBuffer[2] = (byte) (command.ordinal());
         byteBuffer[3] = value;
 
-        LED_SPI.setAutoTransmitData(byteBuffer, 0);
+        LED_SPI.write(byteBuffer, 4);
+        
+        //for(byte Byte : byteBuffer){
+        //    System.out.println(Byte);
+        //}
     }
+
+    
 }
