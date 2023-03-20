@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.LEDConstants.LED_Port;
 
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants.LED_Commands;
 
@@ -10,6 +11,7 @@ public class LightsV2 extends SubsystemBase {
 
     private static SPI LED_SPI = new SPI(LED_Port);
 
+    public static Command previousCommand;
 
     public LightsV2 () {
         LED_SPI.setMode(SPI.Mode.kMode0);
@@ -43,5 +45,15 @@ public class LightsV2 extends SubsystemBase {
         //}
     }
 
-    
+    public void updateCurrentCommand(){
+        Command currentCommand = getCurrentCommand();
+        if(!currentCommand.getName().equals("x")){
+            previousCommand = currentCommand;
+        }
+    }    
+
+    public static void continuePrevious(){
+        previousCommand.initialize();
+        previousCommand.schedule();
+    }
 }

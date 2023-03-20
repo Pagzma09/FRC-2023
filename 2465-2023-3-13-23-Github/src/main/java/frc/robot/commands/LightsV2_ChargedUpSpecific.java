@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.LEDConstants.LED_Commands;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.LightsV2;
+import static frc.robot.subsystems.LightsV2.*;
 
 public class LightsV2_ChargedUpSpecific {
         //-expl Shows our tilt on the seesaw (charging thingy).
@@ -16,21 +17,21 @@ public class LightsV2_ChargedUpSpecific {
   
     public static Command requestCube(LightsV2 lightsvtwoer) {
         return Commands.runOnce(() -> {
-            Command previousCommand = lightsvtwoer.getCurrentCommand();
+            lightsvtwoer.updateCurrentCommand();
             lightsvtwoer.runOnce(() -> {
                 System.out.println("Req'd cube");
                 lightsvtwoer.sendCommand(LED_Commands.REQUEST_CUBE, (byte) 0);
             })
             .andThen(Commands.waitSeconds(3))
             .andThen(Commands.runOnce(() -> {
-                previousCommand.initialize();
-                previousCommand.schedule();
-            }, lightsvtwoer).ignoringDisable(true)).schedule();
-        });
+                LightsV2.continuePrevious();
+            }, lightsvtwoer).ignoringDisable(true)).withName("x").schedule();
+        }).withName("x");
     }
 
     public static Command requestCone(LightsV2 lightsvtwoer) {
         return Commands.runOnce(() -> {
+            lightsvtwoer.updateCurrentCommand();
             Command previousCommand = lightsvtwoer.getCurrentCommand();
             lightsvtwoer.runOnce(() -> {
                 System.out.println("Req'd cone");
@@ -38,9 +39,8 @@ public class LightsV2_ChargedUpSpecific {
             })
             .andThen(Commands.waitSeconds(3))
             .andThen(Commands.runOnce(() -> {
-                previousCommand.initialize();
-                previousCommand.schedule();
-            }, lightsvtwoer).ignoringDisable(true)).schedule();
-        });
+                LightsV2.continuePrevious();
+            }, lightsvtwoer).ignoringDisable(true)).withName("x").schedule();
+        }).withName("x");
     }
 }
